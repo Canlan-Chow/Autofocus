@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoFocus · 周烨琛 · 文物摄影</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Courier New', 'Noto Sans SC', monospace;
+      background: #faf5ed;
+      color: #111;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      font-weight: 500;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+      background: #cfb991; display: flex; flex-direction: column;
+      justify-content: space-between; padding: 2.5rem 2rem;
+      border-right: 2px solid #111; z-index: 200;
+      font-family: 'Courier New', monospace;
+    }
+    .sidebar .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em; line-height: 1.3; }
+    .sidebar .logo .sub { display: block; font-size: 0.78rem; font-weight: 400; color: #5a4a3a; margin-top: 0.3rem; letter-spacing: 0.12em; }
+    .sidebar nav { display: flex; flex-direction: column; gap: 0.5rem; }
+    .sidebar nav a {
+      display: flex; align-items: center; gap: 0.6rem;
+      color: #111; text-decoration: none; font-size: 1rem;
+      padding: 0.5rem 0; border-bottom: 1px solid #111;
+      transition: all 0.2s; font-weight: 500;
+    }
+    .sidebar nav a::before { content: '→'; font-size: 0.85rem; color: #5a4a3a; transition: transform 0.2s; }
+    .sidebar nav a:hover { padding-left: 0.5rem; }
+    .sidebar nav a:hover::before { transform: translateX(4px); color: #111; }
+    .sidebar .sb-foot { font-size: 0.75rem; color: #5a4a3a; letter-spacing: 0.06em; line-height: 1.8; }
+
+    /* ── MAIN ── */
+    .main { margin-left: 280px; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 4rem 5rem; position: relative;
+      border-bottom: 2px solid #111;
+    }
+    #hero::before {
+      content: ''; position: absolute; top: 0; right: 0; width: 45%; height: 100%;
+      background: #cfb991; z-index: -1;
+    }
+    #hero .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; width: 100%; }
+    .hero-text { display: flex; flex-direction: column; gap: 2.5rem; }
+    .hero-num { font-size: 1.58rem; letter-spacing: 0.45em; color: #e07a3d; font-weight: 700; font-family: 'Courier New', monospace; }
+    #hero h1 { font-size: clamp(3.5rem, 8vw, 6.5rem); font-weight: 950; line-height: 0.88; letter-spacing: -0.04em; }
+    #hero h1 .br { display: block; }
+    #hero h1 .accent { color: #e07a3d; }
+    #hero .hero-desc { font-size: 1.2rem; color: #111; max-width: 420px; font-weight: 400; border-top: 2px solid #111; padding-top: 1.5rem; }
+    #hero .hero-cta { display: flex; gap: 1rem; }
+    #hero .hero-cta a {
+      display: inline-block; padding: 0.9rem 2.2rem;
+      background: #111; color: #fff; text-decoration: none;
+      font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 600;
+      transition: all 0.2s;
+    }
+    #hero .hero-cta a:hover { background: #e07a3d; }
+    #hero .hero-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: grayscale(0.4) contrast(1.1); border: 2px solid #111; }
+
+    /* SECTIONS */
+    section { padding: 7rem 5rem; border-bottom: 2px solid #111; }
+    .sec-tag { display: inline-block; color: #e07a3d; padding: 0; font-size: 1.5rem; letter-spacing: 0.25em; font-weight: 700; margin-bottom: 2.5rem; font-family: 'Courier New', monospace; background: none; }
+    .sec-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1; margin-bottom: 4rem; letter-spacing: -0.03em; }
+
+    /* ABOUT */
+    #about .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 5rem; align-items: start; }
+    #about .about-text { font-size: 1.3rem; color: #333; line-height: 1.9; }
+    #about .about-text strong { color: #111; }
+    #about .about-text p { margin-bottom: 1rem; }
+    #about .about-side { display: flex; flex-direction: column; gap: 2.5rem; }
+    #about .portrait { width: 100%; aspect-ratio: 3/4; object-fit: cover; border: 2px solid #111; }
+    #about .stats { display: flex; gap: 0; }
+    #about .stat { flex: 1; padding: 1.2rem 1rem; border: 1px solid #111; text-align: center; border-right: none; }
+    #about .stat:last-child { border-right: 1px solid #111; }
+    #about .stat .num { font-size: 3.6rem; font-weight: 900; color: #e07a3d; line-height: 1; }
+    #about .stat .lab { font-size: 0.72rem; color: #111; letter-spacing: 0.12em; margin-top: 0.3rem; }
+
+    /* PORTFOLIO */
+    #portfolio { padding-right: 0; }
+    .gallery-scroll { display: flex; gap: 2px; overflow-x: auto; padding-bottom: 1rem; }
+    .gallery-scroll::-webkit-scrollbar { height: 4px; }
+    .gallery-scroll::-webkit-scrollbar-thumb { background: #111; }
+    .g-card { flex: 0 0 380px; position: relative; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.3s; }
+    .g-card:hover { border-color: #111; }
+    .g-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; transition: filter 0.4s, transform 0.4s; }
+    .g-card:hover img { filter: brightness(0.55); transform: scale(1.04); }
+    .g-card::after { content: '查看大图'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Courier New', monospace; font-size: 1.1rem; letter-spacing: 0.15em; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+    .g-card:hover::after { opacity: 1; }
+    .g-card .g-info { padding: 1rem; background: #cfb991; display: flex; justify-content: space-between; align-items: baseline; position: relative; z-index: 1; }
+    .g-info .g-tag { font-size: 1.08rem; letter-spacing: 0.18em; color: #e07a3d; font-weight: 700; }
+    .g-info .g-title { font-size: 0.92rem; color: #111; font-weight: 500; }
+
+    /* EQUIPMENT */
+    .gear-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: #111; border: 2px solid #111; }
+    .gear-card { background: #faf5ed; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; transition: all 0.2s; }
+    .gear-card:hover { background: #cfb991; }
+    .gear-card .g-cat { font-size: 0.98rem; letter-spacing: 0.2em; color: #e07a3d; font-weight: 700; }
+    .gear-card .g-name { font-size: 1rem; font-weight: 800; color: #111; }
+    .gear-card .g-desc { font-size: 0.82rem; color: #111; line-height: 1.6; }
+
+    /* SERVICES */
+    .svc-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+    .svc-item { padding: 2.5rem 3rem 2.5rem 0; border-bottom: 1px solid #111; border-right: 1px solid #111; transition: all 0.2s; }
+    .svc-item:nth-child(odd) { padding-left: 0; }
+    .svc-item:nth-child(even) { padding-left: 3rem; border-right: none; }
+    .svc-item:hover { background: #d9c8a5; }
+    .svc-item .svc-num { font-size: 1.08rem; color: #e07a3d; letter-spacing: 0.18em; font-weight: 700; margin-bottom: 0.8rem; }
+    .svc-item h3 { font-size: 1.35rem; font-weight: 800; margin-bottom: 0.6rem; }
+    .svc-item p { font-size: 0.94rem; color: #111; line-height: 1.8; }
+
+    /* CONTACT */
+    #contact .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .ct-info { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .ct-info .ct-block { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ct-block .ct-lbl { font-size: 0.98rem; letter-spacing: 0.25em; color: #e07a3d; font-weight: 700; }
+    .ct-block .ct-val { font-size: 1.05rem; color: #111; font-weight: 500; }
+    .ct-block .ct-val a { color: #111; text-decoration: none; border-bottom: 1px solid #111; }
+    .ct-block .ct-val a:hover { border-color: #111; }
+    .wechat-qr { width: 90px; margin-top: 0.5rem; opacity: 0.7; transition: opacity 0.3s; }
+    .wechat-qr:hover { opacity: 1; }
+    .ct-form { display: flex; flex-direction: column; gap: 1rem; }
+    .ct-form input, .ct-form textarea {
+      width: 100%; padding: 0.8rem 1rem; border: 2px solid #111;
+      background: #d9c8a5; font-size: 0.9rem; transition: border-color 0.3s;
+      outline: none; font-family: 'Courier New', monospace; color: #111;
+    }
+    .ct-form input:focus, .ct-form textarea:focus { border-color: #111; }
+    .ct-form textarea { height: 100px; resize: vertical; }
+    .ct-form button {
+      align-self: flex-start; padding: 0.9rem 2.5rem;
+      background: #111; color: #fff; border: none;
+      font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 700; cursor: pointer;
+      font-family: 'Courier New', monospace; transition: all 0.2s;
+    }
+    .ct-form button:hover { background: #e07a3d; }
+
+    footer { margin-left: 280px; padding: 2.5rem 5rem; background: #cfb991; font-size: 0.6rem; color: #111; letter-spacing: 0.1em; display: flex; justify-content: space-between; }
+
+    /* LIGHTBOX */
+    .lb-overlay { position: fixed; inset: 0; background: rgba(17,17,17,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: lbFadeIn 0.25s; }
+    @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .lb-overlay img { max-width: 90vw; max-height: 85vh; border: 2px solid #faf5ed; box-shadow: 0 0 60px rgba(0,0,0,0.5); }
+    .lb-close { position: absolute; top: 2rem; right: 2.5rem; font-size: 2rem; color: #faf5ed; font-family: 'Courier New', monospace; cursor: pointer; }
+
+    @media (max-width: 1024px) {
+      .sidebar { width: 220px; padding: 2rem 1.5rem; }
+      .main { margin-left: 220px; }
+      section { padding: 5rem 2.5rem; }
+      #hero { padding: 4rem 2.5rem; }
+      .gear-grid { grid-template-columns: repeat(2, 1fr); }
+      .svc-item { padding: 2rem 2rem 2rem 0; }
+      .svc-item:nth-child(even) { padding-left: 2rem; }
+      footer { margin-left: 220px; padding: 2rem 2.5rem; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      footer { margin-left: 0; }
+      section { padding: 4rem 1.2rem; }
+      .sec-title { font-size: 1.8rem; margin-bottom: 2.5rem; }
+      #hero { padding: 6rem 1.2rem 3rem; min-height: auto; }
+      #hero::before { display: none; }
+      #hero .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+      #hero h1 { font-size: 2.4rem; }
+      #hero .hero-img { order: -1; aspect-ratio: 3/4; }
+      #about .about-grid { grid-template-columns: 1fr; }
+      .g-card { flex: 0 0 260px; }
+      .gear-grid { grid-template-columns: 1fr; }
+      .svc-list { grid-template-columns: 1fr; }
+      .svc-item { border-right: none; padding: 1.8rem 0; }
+      .svc-item:nth-child(even) { padding-left: 0; }
+      #contact .ct-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .ct-info { grid-template-columns: 1fr 1fr; }
+      footer { padding: 2rem 1.2rem; }
+    }
+    @media (max-width: 480px) {
+      .ct-info { grid-template-columns: 1fr; }
+      .g-card { flex: 0 0 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">AutoFocus<span class="sub">周烨琛 · 文物摄影</span></div>
+    <nav>
+      <a href="#hero">首页</a>
+      <a href="#about">关于我</a>
+      <a href="#portfolio">作品</a>
+      <a href="#equipment">器材</a>
+      <a href="#services">项目</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <div class="sb-foot">北京 · 青岛<br />EST. 2026</div>
+  </aside>
+
+  <div class="main">
+
+    <section id="hero">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-num">AUTOFOCUS STUDIO</div>
+          <h1>文物<span class="br">摄影</span><span class="accent">&amp; 艺术品翻拍</span></h1>
+          <p class="hero-desc">周烨琛，专注于文物摄影与高端艺术品翻拍。以镜头捕捉文明的质地与时间的温度。</p>
+          <div class="hero-cta">
+            <a href="#contact">预约拍摄</a>
+            
+          </div>
+        </div>
+        <img class="hero-img" src="portrait.jpg" alt="周烨琛" />
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="sec-tag">ABOUT</div>
+      <div class="sec-title">关于我</div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p><strong>周烨琛</strong>，资深摄影师，本科毕业于中国传媒大学。Base：北京 · 青岛。自入行以来，始终专注于一个方向——<strong>文物摄影</strong>与<strong>高端艺术品翻拍</strong>。</p>
+          <p>多次与国内多家艺术空间、文博机构合作，为馆藏文物、当代艺术品、私人收藏提供专业影像记录服务。无论是青铜器的冷峻纹饰、书画的笔墨层次、还是当代油画的光泽质感——AutoFocus Studio 都能给出经得起审视的影像结果。</p>
+        </div>
+        <div class="about-side">
+          <img class="portrait" src="portrait.jpg" alt="周烨琛" />
+          <div class="stats">
+            <div class="stat"><div class="num">9+</div><div class="lab">合作机构</div></div>
+            <div class="stat"><div class="num">3K+</div><div class="lab">拍摄件数</div></div>
+            <div class="stat"><div class="num">12+</div><div class="lab">年度项目</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio">
+      <div class="sec-tag">SELECTED WORKS</div>
+      <div class="sec-title">作品选</div>
+      <div class="gallery-scroll">
+        <div class="g-card"><img src="img/bronze.jpg" alt="青铜器" loading="lazy" /><div class="g-info"><span class="g-tag">青铜器</span><span class="g-title">商代 · 饕餮纹青铜器</span></div></div>
+        <div class="g-card"><img src="img/painting.jpg" alt="书画" loading="lazy" /><div class="g-info"><span class="g-tag">书画</span><span class="g-title">宋徽宗 · 绢本设色花鸟</span></div></div>
+        <div class="g-card"><img src="img/oil.jpg" alt="油画" loading="lazy" /><div class="g-info"><span class="g-tag">油画</span><span class="g-title">克劳德·莫奈 · 日出印象</span></div></div>
+        <div class="g-card"><img src="img/porcelain.jpg" alt="瓷器" loading="lazy" /><div class="g-info"><span class="g-tag">瓷器</span><span class="g-title">明永乐 · 青花缠枝莲纹瓶</span></div></div>
+        <div class="g-card"><img src="img/sculpture.jpg" alt="雕塑" loading="lazy" /><div class="g-info"><span class="g-tag">雕塑</span><span class="g-title">明代 · 彩绘木雕观音</span></div></div>
+        <div class="g-card"><img src="img/watercolor.jpg" alt="翻拍" loading="lazy" /><div class="g-info"><span class="g-tag">翻拍</span><span class="g-title">丢勒 · 写生植物水彩</span></div></div>
+      </div>
+    </section>
+
+    <section id="equipment">
+      <div class="sec-tag">EQUIPMENT</div>
+      <div class="sec-title">器材库</div>
+      <div class="gear-grid">
+        <div class="gear-card"><div class="g-cat">机身</div><div class="g-name">Phase One XF II + IQ 系列</div><div class="g-desc">54×40mm 高像素数码后背，极致解析力</div></div>
+        <div class="gear-card"><div class="g-cat">机身</div><div class="g-name">Sony α7R V</div><div class="g-desc">6100万像素全画幅，灵活多场景拍摄</div></div>
+        <div class="gear-card"><div class="g-cat">镜头群</div><div class="g-name">GM & Schneider Kreuznach</div><div class="g-desc">FE 90mm f/2.8 Macro · Schneider 80mm f/2.8 · 120mm f/4 Macro</div></div>
+        <div class="gear-card"><div class="g-cat">灯光</div><div class="g-name">Broncolor Siros 800L</div><div class="g-desc">专业影室闪灯系统，色温稳定</div></div>
+        <div class="gear-card"><div class="g-cat">灯光</div><div class="g-name">Profoto D2 1000Ws</div><div class="g-desc">高速回电，连续光与闪灯结合</div></div>
+        <div class="gear-card"><div class="g-cat">辅助</div><div class="g-name">Kaiser 翻拍台</div><div class="g-desc">专业平面翻拍支架，双灯对称光位</div></div>
+        <div class="gear-card"><div class="g-cat">后期</div><div class="g-name">Capture One Pro + Photoshop</div><div class="g-desc">飞思联机拍摄，全链路色彩管理</div></div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="sec-tag">SERVICES</div>
+      <div class="sec-title">承接项目</div>
+      <div class="svc-list">
+        <div class="svc-item"><div class="svc-num">01</div><h3>馆藏文物拍摄</h3><p>博物馆、美术馆馆藏文物的系统化影像记录。支持在馆内及合作工作室完成，含多角度展示、局部微距、器物360°环拍，输出符合出版与数字存档标准的高分辨率图像。</p></div>
+        <div class="svc-item"><div class="svc-num">02</div><h3>艺术品翻拍</h3><p>油画、国画、版画、水彩、综合材料等平面作品的高精度翻拍。专业色彩管理流程，适配画册出版、线上展览、拍卖图录。</p></div>
+        <div class="svc-item"><div class="svc-num">03</div><h3>私人收藏拍摄</h3><p>为个人藏家提供上门或工作室拍摄服务。古器物、当代艺术品、珠宝器物，均以博物馆级标准交付。</p></div>
+        <div class="svc-item"><div class="svc-num">04</div><h3>展览及活动记录</h3><p>展览开幕、艺术家访谈、艺术空间空间摄影。纪实风格配合专业灯光，兼顾现场氛围与作品呈现。</p></div>
+        <div class="svc-item"><div class="svc-num">05</div><h3>影像后期处理</h3><p>高精度拼接、透视校正、色彩管理与输出优化。支持ICC色彩空间匹配、局部调色、瑕疵修复。</p></div>
+        <div class="svc-item"><div class="svc-num">06</div><h3>定制拍摄方案</h3><p>根据项目需求定制全套拍摄方案，布光设计、设备选择、前后期流程规划。档期充裕，灵活配合展览、出版等时间节点。</p></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="sec-tag">CONTACT</div>
+      <div class="sec-title">联系方式</div>
+      <div class="ct-grid">
+        <div class="ct-info">
+          <div class="ct-block"><span class="ct-lbl">电话</span><span class="ct-val"><a href="tel:+8618754270966">+86 187 5427 0966</a></span></div>
+          <div class="ct-block"><span class="ct-lbl">邮箱</span><span class="ct-val"><a href="mailto:2322510842@qq.com">2322510842@qq.com</a></span></div>
+          <div class="ct-block"><span class="ct-lbl">微信</span><span class="ct-val">AutoFocus_Yechen <br /><img src="wechat-qr.png" alt="微信二维码" class="wechat-qr" /></span></div>
+          <div class="ct-block"><span class="ct-lbl">工作室</span><span class="ct-val">北京朝阳 · 青岛西海岸新区</span></div>
+        </div>
+        <form class="ct-form" action="https://formsubmit.co/2322510842@qq.com" method="POST">
+          <input type="hidden" name="_subject" value="AutoFocus 新询价" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="text" name="name" placeholder="您的姓名" required />
+          <input type="email" name="email" placeholder="邮箱地址" required />
+          <input type="tel" name="phone" placeholder="电话（选填）" />
+          <textarea name="message" placeholder="简述拍摄需求……" required></textarea>
+          <button type="submit">发送询价</button>
+        </form>
+      </div>
+    </section>
+
+    <footer>AutoFocus Studio © 2026 · 周烨琛 · All Rights Reserved</footer>
+
+  </div>
+
+  <script>
+  (function(){
+    // Lightbox
+    var lb=document.createElement('div');lb.className='lb-overlay';lb.style.display='none';lb.innerHTML='<span class="lb-close">×</span><img />';document.body.appendChild(lb);var img=lb.querySelector('img');function close(){lb.style.display='none'}lb.addEventListener('click',function(e){if(e.target!==img)close()});document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});document.querySelectorAll('.g-card').forEach(function(c){c.addEventListener('click',function(e){e.stopPropagation();img.src=c.querySelector('img').src;lb.style.display='flex'})});
+
+    // Form async submit + toast
+    var form = document.querySelector('.ct-form');
+    var btn = form.querySelector('button');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      btn.textContent = '发送中…';
+      btn.disabled = true;
+      var data = new FormData(form);
+      fetch(form.action, { method: 'POST', body: data })
+        .then(function(){
+          var toast = document.createElement('div');
+          toast.style.cssText = 'position:fixed;top:3rem;left:50%;transform:translateX(-50%);background:#111;color:#faf5ed;padding:1.2rem 2.8rem;font-family:\'Courier New\',monospace;font-size:1rem;letter-spacing:0.1em;font-weight:700;z-index:99999;animation:lbFadeIn 0.35s';
+          toast.textContent = '投递成功，感谢您的信任';
+          document.body.appendChild(toast);
+          setTimeout(function(){
+            toast.style.transition = 'opacity 0.6s';
+            toast.style.opacity = '0';
+            setTimeout(function(){ toast.remove(); }, 600);
+          }, 3000);
+          form.reset();
+          btn.textContent = '发送询价';
+          btn.disabled = false;
+        })
+        .catch(function(){
+          btn.textContent = '发送询价';
+          btn.disabled = false;
+        });
+    });
+  })();
+  </script>
+
+</body>
+</html>
