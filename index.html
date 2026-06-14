@@ -153,42 +153,83 @@
     .lb-overlay { position: fixed; inset: 0; background: rgba(17,17,17,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: lbFadeIn 0.25s; }
     @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
     .lb-overlay img { max-width: 90vw; max-height: 85vh; border: 2px solid #faf5ed; box-shadow: 0 0 60px rgba(0,0,0,0.5); }
-    .lb-close { position: absolute; top: 2rem; right: 2.5rem; font-size: 2rem; color: #faf5ed; font-family: 'Courier New', monospace; cursor: pointer; }
+    .lb-close { position: absolute; top: 1rem; right: 1.5rem; font-size: 2.5rem; color: #faf5ed; font-family: 'Courier New', monospace; cursor: pointer; line-height: 1; }
 
-    @media (max-width: 1024px) {
-      .sidebar { width: 220px; padding: 2rem 1.5rem; }
-      .main { margin-left: 220px; }
-      section { padding: 5rem 2.5rem; }
-      #hero { padding: 4rem 2.5rem; }
-      .gear-grid { grid-template-columns: repeat(2, 1fr); }
-      .svc-item { padding: 2rem 2rem 2rem 0; }
-      .svc-item:nth-child(even) { padding-left: 2rem; }
-      footer { margin-left: 220px; padding: 2rem 2.5rem; }
-    }
-    @media (max-width: 768px) {
+    /* ── MOBILE NAV ── */
+    .mb-nav { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 300; background: #cfb991; border-bottom: 2px solid #111; padding: 0 1.2rem; }
+    .mb-nav .mb-top { display: flex; justify-content: space-between; align-items: center; height: 56px; }
+    .mb-nav .mb-logo { font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; color: #111; }
+    .mb-nav .mb-btn { background: none; border: 2px solid #111; font-size: 1.4rem; font-family: 'Courier New', monospace; cursor: pointer; padding: 0.2rem 0.7rem; color: #111; }
+    .mb-nav .mb-menu { display: none; flex-direction: column; padding-bottom: 1rem; }
+    .mb-nav .mb-menu.open { display: flex; }
+    .mb-nav .mb-menu a { color: #111; text-decoration: none; font-family: 'Courier New', monospace; font-size: 1rem; padding: 0.7rem 0; border-bottom: 1px solid #111; font-weight: 700; }
+
+    @media (max-width: 900px) {
       .sidebar { display: none; }
+      .mb-nav { display: block; }
       .main { margin-left: 0; }
       footer { margin-left: 0; }
-      section { padding: 4rem 1.2rem; }
-      .sec-title { font-size: 1.8rem; margin-bottom: 2.5rem; }
-      #hero { padding: 6rem 1.2rem 3rem; min-height: auto; }
+      section { padding: 5rem 1.5rem 4rem; }
+      .sec-tag { font-size: 1.1rem; margin-bottom: 1.8rem; }
+      .sec-title { font-size: 2.2rem; margin-bottom: 2.5rem; }
+
+      #hero { padding: 7rem 1.5rem 3.5rem; min-height: auto; }
       #hero::before { display: none; }
       #hero .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-      #hero h1 { font-size: 2.4rem; }
-      #hero .hero-img { order: -1; aspect-ratio: 3/4; }
-      #about .about-grid { grid-template-columns: 1fr; }
-      .g-card { flex: 0 0 260px; }
-      .gear-grid { grid-template-columns: 1fr; }
+      #hero .hero-num { font-size: 1.2rem; }
+      #hero h1 { font-size: 3rem; }
+      #hero .hero-img { order: -1; aspect-ratio: 4/5; max-width: 360px; }
+      #hero .hero-desc { font-size: 1.05rem; max-width: 100%; }
+
+      #about .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      #about .about-text { font-size: 1.1rem; }
+      #about .portrait { max-width: 280px; }
+      #about .stat .num { font-size: 2.8rem; }
+
+      .g-card { flex: 0 0 300px; }
+      .g-info .g-tag { font-size: 0.92rem; }
+      .g-info .g-title { font-size: 0.82rem; }
+
+      .gear-grid { grid-template-columns: repeat(2, 1fr); }
+      .gear-card { padding: 1.2rem; }
+      .gear-card .g-cat { font-size: 0.85rem; }
+      .gear-card .g-name { font-size: 0.9rem; }
+      .gear-card .g-desc { font-size: 0.75rem; }
+
       .svc-list { grid-template-columns: 1fr; }
-      .svc-item { border-right: none; padding: 1.8rem 0; }
+      .svc-item { border-right: none; padding: 2rem 0; }
       .svc-item:nth-child(even) { padding-left: 0; }
+      .svc-item .svc-num { font-size: 0.95rem; }
+      .svc-item h3 { font-size: 1.2rem; }
+      .svc-item p { font-size: 0.88rem; }
+
       #contact .ct-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .ct-info { grid-template-columns: 1fr 1fr; }
-      footer { padding: 2rem 1.2rem; }
+      .ct-info { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+      .ct-block .ct-lbl { font-size: 0.85rem; }
+      .ct-block .ct-val { font-size: 0.92rem; }
+      .ct-form input, .ct-form textarea { font-size: 0.85rem; padding: 0.7rem 0.9rem; }
+      .ct-form button { padding: 0.8rem 2rem; font-size: 0.75rem; }
+
+      footer { text-align: center; flex-direction: column; gap: 0.4rem; padding: 2rem 1.5rem; font-size: 0.65rem; }
     }
-    @media (max-width: 480px) {
-      .ct-info { grid-template-columns: 1fr; }
-      .g-card { flex: 0 0 220px; }
+
+    @media (max-width: 560px) {
+      section { padding: 4rem 1.2rem 3rem; }
+      .sec-title { font-size: 1.8rem; }
+
+      #hero { padding: 6.5rem 1.2rem 2.5rem; }
+      #hero h1 { font-size: 2.2rem; }
+      #hero .hero-desc { font-size: 0.95rem; }
+      #hero .hero-cta a { padding: 0.7rem 1.5rem; font-size: 0.75rem; }
+
+      #about .about-text { font-size: 1rem; }
+      #about .portrait { max-width: 240px; }
+      #about .stat .num { font-size: 2.2rem; }
+      #about .stat .lab { font-size: 0.65rem; }
+
+      .g-card { flex: 0 0 240px; }
+      .gear-grid { grid-template-columns: 1fr; }
+      .ct-info { grid-template-columns: 1fr; gap: 1.2rem; }
     }
   </style>
 </head>
@@ -206,6 +247,22 @@
     </nav>
     <div class="sb-foot">北京 · 青岛<br />EST. 2026</div>
   </aside>
+
+  <!-- Mobile Nav -->
+  <nav class="mb-nav">
+    <div class="mb-top">
+      <span class="mb-logo">AutoFocus</span>
+      <button class="mb-btn" onclick="var m=this.parentElement.nextElementSibling;m.classList.toggle('open');this.textContent=m.classList.contains('open')?'×':'☰'">☰</button>
+    </div>
+    <div class="mb-menu">
+      <a href="#hero" onclick="var p=this.parentElement;p.classList.remove('open');p.previousElementSibling.querySelector('.mb-btn').textContent='☰'">首页</a>
+      <a href="#about" onclick="var p=this.parentElement;p.classList.remove('open');p.previousElementSibling.querySelector('.mb-btn').textContent='☰'">关于我</a>
+      <a href="#portfolio" onclick="var p=this.parentElement;p.classList.remove('open');p.previousElementSibling.querySelector('.mb-btn').textContent='☰'">作品</a>
+      <a href="#equipment" onclick="var p=this.parentElement;p.classList.remove('open');p.previousElementSibling.querySelector('.mb-btn').textContent='☰'">器材</a>
+      <a href="#services" onclick="var p=this.parentElement;p.classList.remove('open');p.previousElementSibling.querySelector('.mb-btn').textContent='☰'">项目</a>
+      <a href="#contact" onclick="var p=this.parentElement;p.classList.remove('open');p.previousElementSibling.querySelector('.mb-btn').textContent='☰'">联系</a>
+    </div>
+  </nav>
 
   <div class="main">
 
